@@ -7,7 +7,7 @@ function App() {
   return (
     <div className='root-div'>
     <NavBar/>
-    <div className='mainbody'>body</div>
+    <div className='mainbody h-[80vh]'>body</div>
     <Footer/>
     </div>
   )
