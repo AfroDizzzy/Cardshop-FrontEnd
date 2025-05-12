@@ -1,5 +1,6 @@
 import './App.css'
 import { Footer } from './Components/footer/footer'
+import { MainBody } from './Components/mainBody/mainBody'
 import { NavBar } from './Components/navBar/navBar'
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
   return (
     <div className='root-div'>
     <NavBar/>
-    <div className='mainbody h-[80vh]'>body</div>
+    <MainBody/>
     <Footer/>
     </div>
   )
