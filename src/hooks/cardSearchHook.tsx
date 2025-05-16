@@ -12,8 +12,8 @@ const fetchEDHRECData = async (term: string) => {
 
   const response = await fetch(`https://edhrec.com/api/typeahead?q=${encodeURIComponent(term)}`, {
     headers: {
-      'Origin': null,
-      'Referer': null,  
+      'Origin': '',
+      'Referer': '',  
       'Content-Type': 'application/json',
     }   
   });
