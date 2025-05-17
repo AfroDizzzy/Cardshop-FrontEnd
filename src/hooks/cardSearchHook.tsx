@@ -5,11 +5,6 @@ const fetchEDHRECData = async (term: string) => {
     return [];
   }
 
-  const searchGetHeaders: Headers = new Headers();
-  searchGetHeaders.append('Content-Type', 'application/json')
-  searchGetHeaders.append('origin', '')
-  searchGetHeaders.append('Referer', '')
-
   const response = await fetch(`https://edhrec.com/api/typeahead?q=${encodeURIComponent(term)}`, {
     headers: {
       'Origin': '',
