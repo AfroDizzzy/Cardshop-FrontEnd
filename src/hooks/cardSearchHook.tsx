@@ -21,8 +21,9 @@ const fetchEDHRECData = async (term: string) => {
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-
-  return response.json();
+  const jsonResponse = await response.json(); 
+  console.log(jsonResponse)
+  return jsonResponse;
 };
 export const useEDHRECData  = (searchTerm: string) => {
   return useQuery({
