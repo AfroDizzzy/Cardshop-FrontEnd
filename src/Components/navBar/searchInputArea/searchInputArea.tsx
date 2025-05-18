@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, type MouseEventHandler } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { ScryfallMTGCard } from '../../../types/ScryfallObject';
 import type { EdhrecSearchResponseObject } from '../../../types/EdhrecSearchResponseObject';
 import { useEDHRECData } from '../../../hooks/cardSearchHook';
@@ -12,7 +12,7 @@ export function SearchInputArea() {
   const [isScryfallError, setIsScryfallError] = useState(false);
   const [ScryfallerrorMessage, setScryfallErrorMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>(null);
+  const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>();
 
   //TanStackQuery hooks
   const { data: dataEDHRec, isLoading: isLoadingEDHRec, isError: isErrorEDHRec, isSuccess: isSuccessEDHRec, error:  errorEDHRec } = useEDHRECData(debouncedTerm);
@@ -26,47 +26,6 @@ export function SearchInputArea() {
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
-
-  // Fetch data when debounced term changes
-  // useEffect(() => {
-  //   //useEDHRECData(debouncedTerm)
-  //   // fetchEDHRECData().then(() => {
-  //   //   fetchScryfallData()
-  //   // 
-  //   }, [debouncedTerm]);
-
-  const fetchScryfallData = async () => {
-    if (!debouncedTerm || debouncedTerm.trim() === '') {
-      setScryfallResults([]);
-      return;
-    }
-
-    setIsScryfallLoading(true);
-    setIsScryfallError(false);
-
-    try {
-      const response = await fetch(`https://api.scryfall.com/cards/${encodeURIComponent(selectedItem.image.substring(0,36))}`, {
-        headers: {
-          'Origin': '',
-          'Referer': '',
-          'Content-Type': 'application/json',
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      setScryfallResults(data);
-    } catch (error) {
-      setIsScryfallError(true);
-      setScryfallErrorMessage(error.message);
-      setScryfallResults([]);
-    } finally {
-      setIsScryfallLoading(false);
-    }
-  };
 
   const resultsRef = useRef(null);
 
@@ -132,7 +91,7 @@ export function SearchInputArea() {
                     </li>
                   )})}
                 </ul>
-              ) : debouncedTerm && !dataEDHRec  ? (
+              ) : (debouncedTerm && isErrorEDHRec) || (Array.isArray(dataEDHRec) && dataEDHRec.length === 0) ? (
                 <p className="text-gray-500">No results found</p>
               ) : null}
             </>
