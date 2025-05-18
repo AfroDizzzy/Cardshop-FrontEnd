@@ -7,10 +7,6 @@ import { useFetchIndividualCardDataFromScryfall } from '../../../hooks/cardDetai
 export function SearchInputArea() {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedTerm, setDebouncedTerm] = useState('');
-  const [scryfallResults, setScryfallResults] = useState<ScryfallMTGCard[]>([]);
-  const [isScryfallLoading, setIsScryfallLoading] = useState(false);
-  const [isScryfallError, setIsScryfallError] = useState(false);
-  const [ScryfallerrorMessage, setScryfallErrorMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>();
 
@@ -36,8 +32,6 @@ export function SearchInputArea() {
     setSelectedItem(item);
     setSearchTerm(item.label);
     setIsFocused(false); // Close dropdown after selection
-    console.log('Selected item:', selectedItem);
-    console.log('Scryfall card:', scryfallResults);
     console.log(item.image.substring(0,31))
   };
 
