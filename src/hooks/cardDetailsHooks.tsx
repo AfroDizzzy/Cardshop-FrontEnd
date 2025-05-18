@@ -3,6 +3,7 @@ import type { EdhrecSearchResponseObject } from "../types/EdhrecSearchResponseOb
 import type { ScryfallMTGCard } from "../types/ScryfallObject";
 
 export const fetchIndividualCardDataFromScryfall = async (cardUUID: EdhrecSearchResponseObject) => {
+  if(cardUUID.id === '' || cardUUID === undefined || null){return {}}
   console.warn(cardUUID);
   console.warn(cardUUID.image.substring(0,36));
   const response = await fetch(`https://api.scryfall.com/cards/${encodeURIComponent(cardUUID.image.substring(0,36))}`, {
