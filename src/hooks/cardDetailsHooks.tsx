@@ -2,10 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { EdhrecSearchResponseObject } from "../types/EdhrecSearchResponseObject";
 import type { ScryfallMTGCard } from "../types/ScryfallObject";
 
-const fetchIndividualCardDataFromScryfall = async (cardUUID: EdhrecSearchResponseObject) => {
-//   if (!cardUUID || cardUUID.trim() === '') {
-//     return [];
-//   }
+export const fetchIndividualCardDataFromScryfall = async (cardUUID: EdhrecSearchResponseObject) => {
   console.warn(cardUUID);
   console.warn(cardUUID.image.substring(0,36));
   const response = await fetch(`https://api.scryfall.com/cards/${encodeURIComponent(cardUUID.image.substring(0,36))}`, {
