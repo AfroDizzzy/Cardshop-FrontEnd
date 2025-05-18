@@ -1,20 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type MouseEventHandler } from 'react';
 import type { ScryfallMTGCard } from '../../../types/ScryfallObject';
 import type { EdhrecSearchResponseObject } from '../../../types/EdhrecSearchResponseObject';
+import { useEDHRECData } from '../../../hooks/cardSearchHook';
+import { useFetchIndividualCardDataFromScryfall } from '../../../hooks/cardDetailsHooks';
 
 export function SearchInputArea() {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedTerm, setDebouncedTerm] = useState('');
-  const [edhrecResults, setEdhrecResults] = useState<EdhrecSearchResponseObject[]>([]);
   const [scryfallResults, setScryfallResults] = useState<ScryfallMTGCard[]>([]);
-  const [isEDHRECLoading, setIsEDHRECLoading] = useState(false);
-  const [isEDHRECError, setIsEDHRECError] = useState(false);
   const [isScryfallLoading, setIsScryfallLoading] = useState(false);
   const [isScryfallError, setIsScryfallError] = useState(false);
-  const [EDHRECerrorMessage, setEDHRECErrorMessage] = useState('');
   const [ScryfallerrorMessage, setScryfallErrorMessage] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>(null);
+
+  //TanStackQuery hooks
+  const { data: dataEDHRec, isLoading: isLoadingEDHRec, isError: isErrorEDHRec, isSuccess: isSuccessEDHRec, error:  errorEDHRec } = useEDHRECData(debouncedTerm);
+  const { data: dataScryfall, isLoading: isLoadingScryfall,isError: isErrorScryfall, isSucess: isSuccessScryfall, error: errorScryfall } = useFetchIndividualCardDataFromScryfall(selectedItem);
 
   // Debounce search term to avoid excessive API calls
   useEffect(() => {
@@ -26,46 +28,12 @@ export function SearchInputArea() {
   }, [searchTerm]);
 
   // Fetch data when debounced term changes
-  useEffect(() => {
-    fetchEDHRECData().then(() => {
-      fetchScryfallData()
-    }
-    )
-  }, [debouncedTerm]);
-
-  const fetchEDHRECData = async () => {
-    if (!debouncedTerm || debouncedTerm.trim() === '') {
-      setEdhrecResults([]);
-      return;
-    }
-
-    setIsEDHRECLoading(true);
-    setIsEDHRECError(false);
-
-    try {
-      const response = await fetch(`https://edhrec.com/api/typeahead?q=${encodeURIComponent(debouncedTerm)}`, {
-        headers: {
-          'Origin': null,
-          'Referer': null,
-          'Content-Type': 'application/json',
-
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      setEdhrecResults(data);
-    } catch (error) {
-      setIsEDHRECError(true);
-      setEDHRECErrorMessage(error.message);
-      setEdhrecResults([]);
-    } finally {
-      setIsEDHRECLoading(false);
-    }
-  };
+  // useEffect(() => {
+  //   //useEDHRECData(debouncedTerm)
+  //   // fetchEDHRECData().then(() => {
+  //   //   fetchScryfallData()
+  //   // 
+  //   }, [debouncedTerm]);
 
   const fetchScryfallData = async () => {
     if (!debouncedTerm || debouncedTerm.trim() === '') {
@@ -78,12 +46,11 @@ export function SearchInputArea() {
 
     try {
       const response = await fetch(`https://api.scryfall.com/cards/${encodeURIComponent(selectedItem.image.substring(0,36))}`, {
-        // headers: {
-        //   'Origin': null,
-        //   'Referer': null,
-        //   'Content-Type': 'application/json',
-
-        // }
+        headers: {
+          'Origin': '',
+          'Referer': '',
+          'Content-Type': 'application/json',
+        }
       });
 
       if (!response.ok) {
@@ -102,9 +69,10 @@ export function SearchInputArea() {
   };
 
   const resultsRef = useRef(null);
-  const handleClick = (e, item) => {
-    e.stopPropagation(); // Stop event from bubbling up
-    console.log('Event:', e);
+
+  const handleClick = (event: React.MouseEvent<HTMLLIElement>, item: EdhrecSearchResponseObject) => {
+    event.stopPropagation(); // Stop event from bubbling up
+    console.log('Event:', event);
     console.log('Clicked item:', item);
     setSelectedItem(item);
     setSearchTerm(item.label);
@@ -112,7 +80,6 @@ export function SearchInputArea() {
     console.log('Selected item:', selectedItem);
     console.log('Scryfall card:', scryfallResults);
     console.log(item.image.substring(0,31))
-
   };
 
   return (
@@ -132,24 +99,19 @@ export function SearchInputArea() {
         placeholder="Search for Magic cards..."
         className="w-full border border-gray-300 rounded h-full"
       />
-      {/* {selectedItem && (
-        <div className="mt-2 p-2 bg-blue-50 rounded">
-          <p className="font-medium">Selected: {selectedItem.label}</p>
-        </div>
-      )} */}
       <div className="mt-4 z-50">
         {isFocused && (
           <div className="absolute w-full bg-white z-10 shadow-lg" ref={resultsRef}>
             <>
-              {isEDHRECLoading && <p className="text-gray-500">Loading...</p>}
+              {isLoadingEDHRec && <p className="text-gray-500">Loading...</p>}
 
-              {isEDHRECError && (
-                <p className="text-red-500">Error: {EDHRECerrorMessage}</p>
+              {isErrorEDHRec && (
+                <p className="text-red-500">Error: {isErrorEDHRec}</p>
               )}
 
-              {edhrecResults && edhrecResults.length > 0 ? (
+              {dataEDHRec && dataEDHRec.length > 0 ? (
                 <ul className="border rounded divide-y bg-gray-300 z-50">
-                  {edhrecResults.map((item: EdhrecSearchResponseObject, index) => {
+                  {dataEDHRec.map((item: EdhrecSearchResponseObject, index: number) => {
                     if(!item.url.includes('/cards/')){
                       return;
                     }
@@ -158,7 +120,7 @@ export function SearchInputArea() {
                     <li
                       key={index}
                       className="p-2 hover:bg-gray-100 cursor-pointer flex flex-col items-center"
-                      onClick={(e) => handleClick(e, item)}
+                      onClick={(event) => handleClick(event, item)}
                       tabIndex={0}
                     >
                       <img
@@ -170,7 +132,7 @@ export function SearchInputArea() {
                     </li>
                   )})}
                 </ul>
-              ) : debouncedTerm && !isEDHRECLoading ? (
+              ) : debouncedTerm && !dataEDHRec  ? (
                 <p className="text-gray-500">No results found</p>
               ) : null}
             </>
