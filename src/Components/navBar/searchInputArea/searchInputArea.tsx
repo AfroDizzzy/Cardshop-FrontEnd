@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import type { ScryfallMTGCard } from '../../../types/ScryfallObject';
 import type { EdhrecSearchResponseObject } from '../../../types/EdhrecSearchResponseObject';
 import { useEDHRECData } from '../../../hooks/cardSearchHook';
 import { useFetchIndividualCardDataFromScryfall } from '../../../hooks/cardDetailsHooks';
@@ -8,11 +7,12 @@ export function SearchInputArea() {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedTerm, setDebouncedTerm] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>();
+  const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>({} as EdhrecSearchResponseObject);
 
-  //TanStackQuery hooks
   const { data: dataEDHRec, isLoading: isLoadingEDHRec, isError: isErrorEDHRec, isSuccess: isSuccessEDHRec, error:  errorEDHRec } = useEDHRECData(debouncedTerm);
-  const { data: dataScryfall, isLoading: isLoadingScryfall,isError: isErrorScryfall, isSucess: isSuccessScryfall, error: errorScryfall } = useFetchIndividualCardDataFromScryfall(selectedItem);
+  
+  //if selected item changes, then this custom hook will fire
+  useFetchIndividualCardDataFromScryfall(selectedItem);
 
   // Debounce search term to avoid excessive API calls
   useEffect(() => {
@@ -27,12 +27,9 @@ export function SearchInputArea() {
 
   const handleClick = (event: React.MouseEvent<HTMLLIElement>, item: EdhrecSearchResponseObject) => {
     event.stopPropagation(); // Stop event from bubbling up
-    console.log('Event:', event);
-    console.log('Clicked item:', item);
     setSelectedItem(item);
     setSearchTerm(item.label);
     setIsFocused(false); // Close dropdown after selection
-    console.log(item.image.substring(0,31))
   };
 
   return (
