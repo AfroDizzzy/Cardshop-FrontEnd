@@ -18,11 +18,10 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className='root-div'>
+
         <NavBar />
         <MainBody />
         <Footer />
-      </div>
     </QueryClientProvider >
   )
 }

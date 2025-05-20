@@ -9,29 +9,30 @@ export function ProductDetails() {
 
     console.warn(data)
     return (
-
-        <div className="grid grid-cols-2 bg-amber-200 h-full">
-            <div className="row-span-1 h-full">
-                {data && <img
-                    className=""
-                    srcSet=
-                        {data.image_uris && `${data.image_uris.small} 200w,`+
-
-                        `${data.image_uris.normal} 800w,`+
-                        `${data.image_uris.large} 1000w`}
-                    alt={data?.name || "Product image"}
-                />}
-            </div>
-            <div className="grid grid-rows-3">
-                <div className="row-span-1 bg-amber-300">
-                    {data &&
-                        <div>
-                            {data.name}
-                        </div>}
+         <div className="h-[85vh] w-screen flex flex-col">
+            <div className="grid grid-cols-2 bg-amber-200 h-full w-full overflow-hidden">
+                {/* Image container with fixed height */}
+                <div className="h-full flex items-center justify-center overflow-hidden">
+                    {data && <img
+                        className="h-full w-full object-contain"
+                        alt={data.name}
+                        src={data.image_uris?.normal}
+                    />}
                 </div>
-                <div className="row-span-1 bg-amber-400">Information</div>
-                <div className="row-span-1 bg-amber-500">Price Data</div>
+
+                {/* Right side info with fixed heights */}
+                <div className="grid grid-rows-3 h-full">
+                    <div className="row-span-1 bg-amber-300 p-4 flex items-center overflow-hidden">
+                        <div className="font-bold text-xl">{data.name}</div>
+                    </div>
+                    <div className="row-span-1 bg-amber-400 p-4 flex items-center overflow-hidden">
+                        <div>Oracle Text: {data.oracle_text}</div>
+                    </div>
+                    <div className="row-span-1 bg-amber-500 p-4 flex items-center overflow-hidden">
+                        <div>Price(USD): {data.prices?.usd} </div>
+                    </div>
+                </div>
             </div>
-        </div>
+            </div>
     )
 }
