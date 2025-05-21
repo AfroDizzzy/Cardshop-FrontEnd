@@ -1,15 +1,14 @@
 export const ProductMerchants= ()=>{
     return (
-        <div className="grid-rows-10 bg-amber-700 ">
-            <div className="row-span-1">
-                item 1
-            </div>
-            <div className="row-span-2">
-                item 2
-            </div>
-            <div className="row-span-3">
-                item 3
-            </div>
-        </div>
+        <div className={`flex  h-[100] w-full flex-col items-center justify-center p-4`}>
+      <h2 className="text-2xl font-bold mb-4">Right Section</h2>
+      <p className="mb-4">This section takes up the entire right half of the screen</p>
+      <button
+        className={`py-2 px-4 rounded`}
+
+      >
+        Toggle {} Mode
+      </button>
+    </div>
     )
 }
