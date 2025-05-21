@@ -1,8 +1,6 @@
 import { SignInButtonNavBar } from "./signInButton/signInButton";
 import { SignUpButtonNavBar } from "./signUpButton/signUpButton";
 import { SearchInputArea } from "./searchInputArea/searchInputArea";
-import './navBar.css'
-
 
 export function NavBar() {
     const signedIn = false;
