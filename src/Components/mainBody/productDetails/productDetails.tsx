@@ -12,7 +12,7 @@ export function ProductDetails() {
          <div className="h-[85vh] w-screen flex flex-col">
             <div className="grid grid-cols-2 bg-amber-200 h-full w-[50vw] overflow-hidden">
                 {/* Image container with fixed height */}
-                <div className="h-full flex items-center justify-center overflow-hidden">
+                <div className="h-full flex items-center justify-center overflow-hidden p-4">
                     {data && <img
                         className="h-full w-full object-contain"
                         alt={data.name}
