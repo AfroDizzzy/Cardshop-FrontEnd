@@ -9,8 +9,8 @@ export function SearchInputArea() {
   const [isFocused, setIsFocused] = useState(false);
   const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>({} as EdhrecSearchResponseObject);
 
-  const { data: dataEDHRec, isLoading: isLoadingEDHRec, isError: isErrorEDHRec, isSuccess: isSuccessEDHRec, error:  errorEDHRec } = useEDHRECData(debouncedTerm);
-  
+  const { data: dataEDHRec, isLoading: isLoadingEDHRec, isError: isErrorEDHRec, isSuccess: isSuccessEDHRec, error: errorEDHRec } = useEDHRECData(debouncedTerm);
+
   //if selected item changes, then this custom hook will fire
   useFetchIndividualCardDataFromScryfall(selectedItem);
 
@@ -47,7 +47,7 @@ export function SearchInputArea() {
           }
         }}
         placeholder="Search for Magic cards..."
-        className="border border-gray-300 rounded h-full"
+        className="border border-gray-300 rounded h-full hover:bg-gray-100 hover:border-violet-500 hover:placeholder-violet-500 "
       />
       <div className="mt-4 z-50">
         {isFocused && (
@@ -62,25 +62,21 @@ export function SearchInputArea() {
               {dataEDHRec && dataEDHRec.length > 0 ? (
                 <ul className="border rounded divide-y bg-gray-300 z-50">
                   {dataEDHRec.map((item: EdhrecSearchResponseObject, index: number) => {
-                    if(!item.url.includes('/cards/')){
+                    if (!item.url.includes('/cards/')) {
                       return;
                     }
 
                     return (
-                    <li
-                      key={index}
-                      className="p-2 hover:bg-gray-100 cursor-pointer flex flex-col items-center"
-                      onClick={(event) => handleClick(event, item)}
-                      tabIndex={0}
-                    >
-                      <img
-                        src={`https://cards.scryfall.io/art_crop/front/4/3/${item.image}`}
-                        alt={item.label}
-                        className="w-full h-auto"
-                      />
-                      {item.label}
-                    </li>
-                  )})}
+                      <li
+                        key={index}
+                        className="p-2 hover:bg-gray-100 cursor-pointer flex flex-col items-center"
+                        onClick={(event) => handleClick(event, item)}
+                        tabIndex={0}
+                      >
+                        {item.label}
+                      </li>
+                    )
+                  })}
                 </ul>
               ) : (debouncedTerm && isErrorEDHRec) || (Array.isArray(dataEDHRec) && dataEDHRec.length === 0) ? (
                 <p className="text-gray-500">No results found</p>
