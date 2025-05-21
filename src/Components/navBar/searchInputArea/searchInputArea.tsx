@@ -47,11 +47,11 @@ export function SearchInputArea() {
           }
         }}
         placeholder="Search for Magic cards..."
-        className="w-full border border-gray-300 rounded h-full"
+        className="border border-gray-300 rounded h-full"
       />
       <div className="mt-4 z-50">
         {isFocused && (
-          <div className="absolute w-full bg-white z-10 shadow-lg" ref={resultsRef}>
+          <div className="absolute w-[20vw] bg-white z-10 shadow-lg" ref={resultsRef}>
             <>
               {isLoadingEDHRec && <p className="text-gray-500">Loading...</p>}
 
