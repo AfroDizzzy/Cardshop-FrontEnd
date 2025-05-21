@@ -10,7 +10,7 @@ export function ProductDetails() {
     console.warn(data)
     return (
          <div className="h-[85vh] w-screen flex flex-col">
-            <div className="grid grid-cols-2 bg-amber-200 h-full w-full overflow-hidden">
+            <div className="grid grid-cols-2 bg-amber-200 h-full w-[50vw] overflow-hidden">
                 {/* Image container with fixed height */}
                 <div className="h-full flex items-center justify-center overflow-hidden">
                     {data && <img
