@@ -1,15 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
-import type { EdhrecSearchResponseObject } from '../../../types/EdhrecSearchResponseObject';
-import { useEDHRECData } from '../../../hooks/cardSearchHook';
-import { useFetchIndividualCardDataFromScryfall } from '../../../hooks/cardDetailsHooks';
+import { useState, useEffect, useRef } from "react";
+import type { EdhrecSearchResponseObject } from "../../../types/EdhrecSearchResponseObject";
+import { useEDHRECData } from "../../../hooks/cardSearchHook";
+import { useFetchIndividualCardDataFromScryfall } from "../../../hooks/cardDetailsHooks";
 
 export function SearchInputArea() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedTerm, setDebouncedTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedTerm, setDebouncedTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>({} as EdhrecSearchResponseObject);
+  const [selectedItem, setSelectedItem] = useState<EdhrecSearchResponseObject>(
+    {} as EdhrecSearchResponseObject
+  );
 
-  const { data: dataEDHRec, isLoading: isLoadingEDHRec, isError: isErrorEDHRec, isSuccess: isSuccessEDHRec, error: errorEDHRec } = useEDHRECData(debouncedTerm);
+  const {
+    data: dataEDHRec,
+    isLoading: isLoadingEDHRec,
+    isError: isErrorEDHRec,
+    // error: errorEDHRec,
+  } = useEDHRECData(debouncedTerm);
 
   //if selected item changes, then this custom hook will fire
   useFetchIndividualCardDataFromScryfall(selectedItem);
@@ -25,7 +32,10 @@ export function SearchInputArea() {
 
   const resultsRef = useRef(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLLIElement>, item: EdhrecSearchResponseObject) => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLLIElement>,
+    item: EdhrecSearchResponseObject
+  ) => {
     event.stopPropagation(); // Stop event from bubbling up
     setSelectedItem(item);
     setSearchTerm(item.label);
@@ -42,7 +52,10 @@ export function SearchInputArea() {
         onBlur={(e) => {
           // Prevent onBlur from firing when clicking on the results list
           // Only hide results when clicking outside both input and results
-          if (!e.relatedTarget || !e.currentTarget.parentNode.contains(e.relatedTarget)) {
+          if (
+            !e.relatedTarget ||
+            !e.currentTarget.parentNode?.contains(e.relatedTarget)
+          ) {
             setTimeout(() => setIsFocused(false), 150);
           }
         }}
@@ -51,7 +64,10 @@ export function SearchInputArea() {
       />
       <div className="mt-4 z-50">
         {isFocused && (
-          <div className="absolute w-[20vw] bg-white z-10 shadow-lg" ref={resultsRef}>
+          <div
+            className="absolute w-[20vw] bg-white z-10 shadow-lg"
+            ref={resultsRef}
+          >
             <>
               {isLoadingEDHRec && <p className="text-gray-500">Loading...</p>}
 
@@ -61,24 +77,27 @@ export function SearchInputArea() {
 
               {dataEDHRec && dataEDHRec.length > 0 ? (
                 <ul className="border rounded divide-y bg-gray-300 z-50">
-                  {dataEDHRec.map((item: EdhrecSearchResponseObject, index: number) => {
-                    if (!item.url.includes('/cards/')) {
-                      return;
-                    }
+                  {dataEDHRec.map(
+                    (item: EdhrecSearchResponseObject, index: number) => {
+                      if (!item.url.includes("/cards/")) {
+                        return;
+                      }
 
-                    return (
-                      <li
-                        key={index}
-                        className="p-2 hover:bg-gray-100 cursor-pointer flex flex-col items-center"
-                        onClick={(event) => handleClick(event, item)}
-                        tabIndex={0}
-                      >
-                        {item.label}
-                      </li>
-                    )
-                  })}
+                      return (
+                        <li
+                          key={index}
+                          className="p-2 hover:bg-gray-100 cursor-pointer flex flex-col items-center"
+                          onClick={(event) => handleClick(event, item)}
+                          tabIndex={0}
+                        >
+                          {item.label}
+                        </li>
+                      );
+                    }
+                  )}
                 </ul>
-              ) : (debouncedTerm && isErrorEDHRec) || (Array.isArray(dataEDHRec) && dataEDHRec.length === 0) ? (
+              ) : (debouncedTerm && isErrorEDHRec) ||
+                (Array.isArray(dataEDHRec) && dataEDHRec.length === 0) ? (
                 <p className="text-gray-500">No results found</p>
               ) : null}
             </>
