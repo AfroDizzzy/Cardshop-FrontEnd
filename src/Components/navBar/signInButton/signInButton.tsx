@@ -5,7 +5,7 @@ export function SignInButtonNavBar(){
     }
 
     return (
-        <button type="button" className={'sign-in-button-nav-bar'} onClick={handleClick}>
+        <button type="button" className="hover:border-violet-500" onClick={handleClick}>
             Sign In
         </button>
     )
