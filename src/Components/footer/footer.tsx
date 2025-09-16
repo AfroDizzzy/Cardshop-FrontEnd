@@ -11,7 +11,7 @@ export function Footer() {
                 <span className="text-white font-bold text-xs">M</span>
               </div>
               <span className="text-xs md:text-sm font-bold truncate">
-                MTG Marketplace
+                Card Shop
               </span>
             </div>
           </div>
@@ -81,7 +81,7 @@ export function Footer() {
               </a>
             </div>
             <p className="text-gray-400 text-xs hidden md:block">
-              © {currentYear} MTG Marketplace
+              © {currentYear} Card Shop
             </p>
           </div>
         </div>

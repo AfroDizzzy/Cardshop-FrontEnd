@@ -63,11 +63,11 @@ export function NavBar() {
         <div className="logo-section">
           <div className="logo-container">
             <div className="logo-icon">
-              <span className="logo-text">M</span>
+              <span className="logo-text">C</span>
             </div>
           </div>
           <div className="brand-title">
-            <h1>MTG Marketplace</h1>
+            <h1>Card Shop</h1>
           </div>
         </div>
 

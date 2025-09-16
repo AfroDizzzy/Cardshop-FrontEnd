@@ -3,12 +3,13 @@
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  height: 5vh;
+  height: 10vh;
+
   display: flex;
   align-items: center;
   position: relative;
   overflow: visible;
-  padding: 0 1rem; /* Added horizontal padding */
+  padding: 0 1rem;
 }
 
 .navbar-content {
@@ -18,8 +19,6 @@
   height: 100%;
   width: 100%;
   max-width: 100%;
-  padding: 0 0.5rem; /* Added internal padding */
-  box-sizing: border-box;
 }
 
 /* Logo Section */
@@ -27,11 +26,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-shrink: 0; /* Prevent logo from shrinking */
-}
-
-.logo-container {
-  flex-shrink: 0;
 }
 
 .logo-icon {
@@ -60,7 +54,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0; /* Remove default margin */
+  margin: 10px; /* Remove default margin */
 }
 
 /* Search Section */
