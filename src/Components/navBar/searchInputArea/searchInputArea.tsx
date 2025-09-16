@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import type { EdhrecSearchResponseObject } from "../../../types/EdhrecSearchResponseObject";
 import { useEDHRECData } from "../../../hooks/cardSearchHook";
 import { useFetchIndividualCardDataFromScryfall } from "../../../hooks/cardDetailsHooks";
+import { Search } from "lucide-react";
+
+import "./searchInputAreaStyles.css";
 
 export function SearchInputArea() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,10 +18,9 @@ export function SearchInputArea() {
     data: dataEDHRec,
     isLoading: isLoadingEDHRec,
     isError: isErrorEDHRec,
-    // error: errorEDHRec,
   } = useEDHRECData(debouncedTerm);
 
-  //if selected item changes, then this custom hook will fire
+  // If selected item changes, then this custom hook will fire
   useFetchIndividualCardDataFromScryfall(selectedItem);
 
   // Debounce search term to avoid excessive API calls
@@ -30,80 +32,85 @@ export function SearchInputArea() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const resultsRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleClick = (
     event: React.MouseEvent<HTMLLIElement>,
     item: EdhrecSearchResponseObject
   ) => {
-    event.stopPropagation(); // Stop event from bubbling up
+    event.stopPropagation();
     setSelectedItem(item);
     setSearchTerm(item.label);
-    setIsFocused(false); // Close dropdown after selection
+    setIsFocused(false);
   };
 
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLLIElement>,
+    item: EdhrecSearchResponseObject
+  ) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setSelectedItem(item);
+      setSearchTerm(item.label);
+      setIsFocused(false);
+    }
+  };
+
+  console.log(dataEDHRec);
+
   return (
-    <div className="max-w-md mx-auto content-center">
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={(e) => {
-          // Prevent onBlur from firing when clicking on the results list
-          // Only hide results when clicking outside both input and results
-          if (
-            !e.relatedTarget ||
-            !e.currentTarget.parentNode?.contains(e.relatedTarget)
-          ) {
-            setTimeout(() => setIsFocused(false), 150);
-          }
-        }}
-        placeholder="Search for Magic cards..."
-        className="border border-gray-300 rounded h-full hover:bg-gray-100 hover:border-violet-500 hover:placeholder-violet-500 "
-      />
-      <div className="mt-4 z-50">
-        {isFocused && (
-          <div
-            className="absolute w-[20vw] bg-white z-10 shadow-lg"
-            ref={resultsRef}
-          >
-            <>
-              {isLoadingEDHRec && <p className="text-gray-500">Loading...</p>}
-
-              {isErrorEDHRec && (
-                <p className="text-red-500">Error: {isErrorEDHRec}</p>
-              )}
-
-              {dataEDHRec && dataEDHRec.length > 0 ? (
-                <ul className="border rounded divide-y bg-gray-300 z-50">
-                  {dataEDHRec.map(
-                    (item: EdhrecSearchResponseObject, index: number) => {
-                      if (!item.url.includes("/cards/")) {
-                        return;
-                      }
-
-                      return (
-                        <li
-                          key={index}
-                          className="p-2 hover:bg-gray-100 cursor-pointer flex flex-col items-center"
-                          onClick={(event) => handleClick(event, item)}
-                          tabIndex={0}
-                        >
-                          {item.label}
-                        </li>
-                      );
-                    }
-                  )}
-                </ul>
-              ) : (debouncedTerm && isErrorEDHRec) ||
-                (Array.isArray(dataEDHRec) && dataEDHRec.length === 0) ? (
-                <p className="text-gray-500">No results found</p>
-              ) : null}
-            </>
-          </div>
-        )}
+    <div className="search-container" ref={containerRef}>
+      <div className="search-input-wrapper">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+          placeholder="Search for Magic cards..."
+          className="search-input"
+        />
+        <div className="search-icon-container">
+          <Search className="search-icon" />
+        </div>
       </div>
+
+      {isFocused && searchTerm && (
+        <div className="results-dropdown">
+          {isLoadingEDHRec && <p className="loading-message">Loading...</p>}
+
+          {isErrorEDHRec && (
+            <p className="error-message">Error loading results</p>
+          )}
+
+          {dataEDHRec && Array.isArray(dataEDHRec) && (
+            <>
+              {dataEDHRec
+                .filter((item: EdhrecSearchResponseObject) =>
+                  item.url?.includes("/cards/")
+                )
+                .map((item: EdhrecSearchResponseObject, index: number) => (
+                  <div
+                    key={item.url || index}
+                    className="result-item"
+                    onClick={(event) => handleClick(event, item)}
+                    onKeyDown={(event) => handleKeyDown(event, item)}
+                    tabIndex={0}
+                    role="option"
+                  >
+                    <span className="result-text">{item.label}</span>
+                  </div>
+                ))}
+            </>
+          )}
+
+          {dataEDHRec &&
+            Array.isArray(dataEDHRec) &&
+            dataEDHRec.length === 0 && (
+              <p className="no-results-message">No results found</p>
+            )}
+        </div>
+      )}
     </div>
   );
 }
