@@ -1,0 +1,36 @@
+/* Main container */
+.product-container {
+  height: 80vh;
+  display: flex;
+  background-color: #f3f4f6;
+}
+
+/* Desktop layout container */
+.desktop-layout {
+  display: none;
+  width: 100%;
+}
+
+/* Desktop layout - show on medium screens and up */
+@media (min-width: 768px) {
+  .desktop-layout {
+    display: flex;
+  }
+}
+
+/* Desktop sections */
+.desktop-section {
+  width: 50%;
+}
+
+/* Mobile layout container */
+.mobile-layout {
+  width: 100%;
+}
+
+/* Mobile layout - hide on medium screens and up */
+@media (min-width: 768px) {
+  .mobile-layout {
+    display: none;
+  }
+}

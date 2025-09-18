@@ -67,6 +67,11 @@
   min-width: 0; /* Allow shrinking */
 }
 
+.result-item {
+  background-color: #d3b8f183;
+  opacity: 90%;
+}
+
 /* Auth Buttons Section */
 .auth-section {
   display: flex;

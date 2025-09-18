@@ -1,0 +1,133 @@
+/* Card Container */
+.card-container {
+  overflow: auto;
+  height: 100%;
+  background-color: white;
+  color: #111827;
+}
+
+.card-grid {
+  display: flex;
+  overflow: auto;
+  flex-direction: row;
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.image-wrapper {
+  padding: 2rem;
+  max-width: 24rem;
+  width: 100%;
+}
+
+.card-image {
+  width: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.card-image:hover {
+  transform: scale(1.05);
+}
+
+/* Info Section */
+.info-section {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Header Section */
+.header-section {
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mana-cost {
+  font-size: 1.125rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  color: #ea580c;
+  background-color: #fff7ed;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.type-line {
+  color: #4b5563;
+  font-weight: 500;
+}
+
+/* Oracle Section */
+.oracle-section {
+  flex: 1;
+  padding: 1.5rem 0;
+}
+
+.oracle-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.75rem;
+}
+
+.oracle-content {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.oracle-text {
+  color: #374151;
+  line-height: 1.625;
+  white-space: pre-line;
+  margin: 0;
+}
+
+/* Details Section */
+.details-section {
+  margin-top: 1rem;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.detail-value {
+  color: #111827;
+  margin: 0;
+}
+
+.price-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #059669;
+  margin: 0;
+}
